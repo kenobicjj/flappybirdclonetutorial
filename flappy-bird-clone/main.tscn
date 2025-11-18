@@ -1,0 +1,52 @@
+[gd_scene load_steps=9 format=3 uid="uid://cyhudu6gv0sxv"]
+
+[ext_resource type="Script" uid="uid://bhyqtudmii1jx" path="res://main.gd" id="1_h2yge"]
+[ext_resource type="Texture2D" uid="uid://cm3ornsv14m3x" path="res://asset/bg.png" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://j75o86jwdnli" path="res://pipe.tscn" id="2_lquwl"]
+[ext_resource type="PackedScene" uid="uid://b2rkjadikjoup" path="res://bird.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://u5qm117etxuh" path="res://ground.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://ddwsodhr2rm0b" path="res://game_over.tscn" id="6_7mycd"]
+[ext_resource type="AudioStream" uid="uid://o72huh4shh2n" path="res://asset/389634__stubb__wing-flap-1.wav" id="7_272bh"]
+[ext_resource type="AudioStream" uid="uid://ckyfpsae66gus" path="res://asset/493883__kurtless__doink-oww.mp3" id="8_5vw27"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_h2yge")
+pipe_scene = ExtResource("2_lquwl")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(436, 398)
+texture = ExtResource("1_ig7tw")
+
+[node name="Bird" parent="." instance=ExtResource("3_1bvp3")]
+
+[node name="Ground" parent="." instance=ExtResource("4_1bvp3")]
+z_index = 1
+position = Vector2(5, 855)
+
+[node name="PipeTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[node name="ScoreLabel" type="Label" parent="."]
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -85.0
+offset_top = 21.0
+offset_right = 86.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "SCORE: 0"
+
+[node name="GameOver" parent="." instance=ExtResource("6_7mycd")]
+
+[node name="FlapAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_272bh")
+
+[node name="CollisionAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_5vw27")
+
+[connection signal="hit" from="Ground" to="." method="_on_ground_hit"]
+[connection signal="timeout" from="PipeTimer" to="." method="_on_pipe_timer_timeout"]
+[connection signal="restart" from="GameOver" to="." method="_on_game_over_restart"]
